@@ -34,7 +34,7 @@ describe("My Probot app", () => {
     probot.load(myProbotApp);
   });
 
-  test("creates a comment when an issue is opened", async () => {
+  test("creates a comment when an issue is opened", async (done) => {
     const mock = nock("https://api.github.com")
       // Test that we correctly return a test token
       .post("/app/installations/2/access_tokens")
@@ -47,7 +47,7 @@ describe("My Probot app", () => {
 
       // Test that a comment is posted
       .post("/repos/hiimbex/testing-things/issues/1/comments", (body: any) => {
-        expect(body).toMatchObject(issueCreatedBody);
+        done(expect(body).toMatchObject(issueCreatedBody));
         return true;
       })
       .reply(200);

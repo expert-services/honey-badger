@@ -1,6 +1,6 @@
-# honey-badger
+# project-flash
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that 🦡 A Deployment Protection Rule (Probot app) that uses CodeQL to scan workflow files
+> A GitHub App built with [Probot](https://github.com/probot/probot) that Probot app to manage ProjectV2
 
 ## Setup
 
@@ -16,18 +16,18 @@ npm start
 
 ```sh
 # 1. Build container
-docker build -t honey-badger .
+docker build -t project-flash .
 
 # 2. Start container
-docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> honey-badger
+docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> project-flash
 ```
 
 ## Contributing
 
-If you have suggestions for how honey-badger could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
+If you have suggestions for how project-flash could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
 
 For more, check out the [Contributing Guide](CONTRIBUTING.md).
 
 ## License
 
-[ISC](LICENSE) © 2023 David Wiggs
+[ISC](LICENSE) © 2023 Yadhav Jayaraman <57544838+decyjphr@users.noreply.github.com>
