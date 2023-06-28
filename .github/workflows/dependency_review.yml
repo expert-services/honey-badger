@@ -1,0 +1,9 @@
+name: Dependency Review
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  dependency_review:
+    uses: expert-services/reusable-workflows/.github/workflows/dependency_review.yml@main
+    with:
+      ecosystem: npm
