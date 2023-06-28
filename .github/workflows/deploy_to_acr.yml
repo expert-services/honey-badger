@@ -16,7 +16,7 @@ on:
       - 'terraform/**'
 
 env:
-  IMAGE_NAME: beaver
+  IMAGE_NAME: honeybadger
 
 jobs:
   build:
