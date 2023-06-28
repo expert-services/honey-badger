@@ -63,8 +63,6 @@ resource "azurerm_linux_web_app" "honeybadger-app" {
   }
 
   app_settings = {
-    "AZURE_EVENT_HUB_CONNECTION_STRING" = azurerm_eventhub_namespace.honeybadger.default_primary_connection_string
-    "AZURE_EVENT_HUB_NAME"              = azurerm_eventhub.honeybadger.name
     "WEBHOOK_SECRET"                    = var.webhook_secret
     "APP_ID"                            = var.app_id
     "PRIVATE_KEY"                       = var.private_key
