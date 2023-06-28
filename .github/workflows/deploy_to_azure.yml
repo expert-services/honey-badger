@@ -40,7 +40,7 @@ jobs:
           with:
             terraform_version: 1.4.6
             
-        - name: Deploy PowerBI Workspace and Azure Infrastructure
+        - name: Deploy Azure Infrastructure
           uses: azure/powershell@v1
           with:
             inlineScript: |
