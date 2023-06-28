@@ -14,7 +14,7 @@ _,-='=- =-  -'"--.__,,.._
                         '>>>
                         `
 export = async (app: Probot) => {
-  app.onAny(async (context: any) => {
+  app.on("deployment_protection_rule" as any, async (context: any) => {
     app.log.debug(`Received Webhook ${JSON.stringify(context)}`)
     const regex = /[^0-9]*([0-9]*).*$/g;
     const matches = regex.exec(context.payload.deployment_callback_url)
@@ -23,7 +23,7 @@ export = async (app: Probot) => {
     if (context.name as string === "deployment_protection_rule") {
       const result=Math.random()*10;
       if (result<5) {
-        app.log.debug(` approving since result is ${result}`)
+        app.log.debug(`approving since result is ${result}`)
         await approveWorkflow(app, context, runId);
 
       } else {
@@ -31,7 +31,6 @@ export = async (app: Probot) => {
         await rejectWorkflow(app, context, runId)
       }
     }
-
   })
 
   app.log.info("Honey Badger's listening!");
