@@ -1,6 +1,5 @@
 # The following variables are expected to be present as environment variables 
 variable "org" {}
-variable "group_id" {}
 variable "webhook_secret" {}
 variable "private_key" {}
 variable "app_id" {}
