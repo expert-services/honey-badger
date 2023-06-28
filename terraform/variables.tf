@@ -4,7 +4,7 @@ variable "docker-config" {
     tag   = string
   })
   default = {
-    image = "yjactionsmetrics.azurecr.io/beaver"
+    image = "githubservices.azurecr.io/honeybadger"
     tag   = "latest"
   }
 }
