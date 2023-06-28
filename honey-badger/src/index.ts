@@ -20,17 +20,17 @@ export = async (app: Probot) => {
     const matches = regex.exec(context.payload.deployment_callback_url)
     context.payload.deployment_callback_url.match(regex);
     const runId = matches?.[1];
-    if (context.name as string === "deployment_protection_rule") {
-      const result=Math.random()*10;
-      if (result<5) {
-        app.log.debug(`approving since result is ${result}`)
-        await approveWorkflow(app, context, runId);
 
-      } else {
-        app.log.debug(`rejecting since result is ${result}`)
-        await rejectWorkflow(app, context, runId)
-      }
+    const result = Math.random() * 10;
+    if (result < 5) {
+      app.log.debug(`approving since result is ${result}`)
+      await approveWorkflow(app, context, runId);
+
+    } else {
+      app.log.debug(`rejecting since result is ${result}`)
+      await rejectWorkflow(app, context, runId)
     }
+
   })
 
   app.log.info("Honey Badger's listening!");
@@ -45,7 +45,7 @@ async function approveWorkflow(app: Probot, context: any, run_id: string | undef
       environment_name: context.payload.environment,
       state: 'approved',
       comment: 'Compliance checks passed.'
-    }))    
+    }))
   } catch (error: any) {
     app.log(error)
   }
@@ -59,7 +59,7 @@ async function rejectWorkflow(app: Probot, context: any, run_id: string | undefi
       environment_name: context.payload.environment,
       state: 'rejected',
       comment: 'Failed Compliance Checks'
-    }))    
+    }))
   } catch (error: any) {
     app.log(error)
   }
