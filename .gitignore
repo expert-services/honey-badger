@@ -1,7 +1,11 @@
-node_modules
-npm-debug.log
 *.pem
-!mock-cert.pem
+.terraform
+.terraform.tfstate.lock.info
+.terraform.lock.hcl
+.terraform.tfstate
+.terraform.tfstate.backup
+terraform.tfstate
+terraform.tfstate.backup
+node_modules
+.vscode
 .env
-coverage
-lib
