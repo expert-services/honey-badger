@@ -25,6 +25,8 @@ jobs:
           registry: ${{ vars.ACR_ENDPOINT }}
           username: ${{ vars.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
+      - name: Install tsc
+        run: npm install tsc
       - name: Build & Push
         uses: docker/build-push-action@v4
         with:
