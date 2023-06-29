@@ -5,9 +5,10 @@ RUN curl -L https://github.com/github/codeql-action/releases/latest/download/cod
     rm codeql-bundle.tar.gz && \
     mv codeql /usr/local/bin/
 WORKDIR /usr/src/app
-COPY package.json package-lock.json .
+COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 RUN npm cache clean --force
 ENV NODE_ENV="production"
 COPY . .
+RUN npm run build
 CMD [ "npm", "start" ]
