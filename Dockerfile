@@ -6,7 +6,7 @@ RUN curl -L https://github.com/github/codeql-action/releases/latest/download/cod
     mv codeql /usr/local/bin/
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm ci --production
 RUN npm cache clean --force
 ENV NODE_ENV="production"
 COPY . .
