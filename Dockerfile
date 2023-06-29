@@ -11,4 +11,5 @@ RUN npm cache clean --force
 ENV NODE_ENV="production"
 COPY . .
 RUN npm run build
+ENV PATH="$PATH:/usr/local/bin/codeql"
 CMD [ "npm", "start" ]
