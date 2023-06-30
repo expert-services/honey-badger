@@ -22,6 +22,7 @@ export = async (app: Probot) => {
     context.payload.deployment_callback_url.match(regex);
     const runId = matches?.[1];
 
+    // Get workflow file
     const workflow = await getWorkflow(app, context, runId);
     const workflowFile = await context.octokit.request('GET /repos/{owner}/{repo}/contents/{path}', context.repo({
       path: workflow.data.path,
@@ -34,26 +35,28 @@ export = async (app: Probot) => {
     const fs = require('fs');
     fs.writeFileSync(workflowPath, workflowFileContent);
 
-    // Execute codeql to create database
+    // Execute CodeQL 
     const codeqlQueries = require('path').join(__dirname, '..', 'codeql-queries', 'javascript', 'CWE-829', 'UnpinnedActionsTag.ql');
     const codeqlDatabase = require('path').join(workspace, 'codeql_database', 'javascript');
     executeCommand(`codeql --version`);
     executeCommand(`mkdir -p ${codeqlDatabase} && codeql database create ${codeqlDatabase} --language javascript --source-root ${workspace} --verbosity=errors`);
     executeCommand(`codeql database analyze ${codeqlDatabase} ${codeqlQueries} --format=sarif-latest --output=${workspace}/results.sarif --verbosity=errors`);
     
-    // executeCommand(`rm -rf ${workspace}`);
-
-    const result = Math.random() * 10;
-    if (result < 5) {
-      app.log.debug(`approving since result is ${result}`)
-      await approveWorkflow(app, context, runId);
-
-    } else {
-      app.log.debug(`rejecting since result is ${result}`)
+    // If results.sarif contains more than one result, reject
+    const results = require('fs').readFileSync(`${workspace}/results.sarif`, 'utf8');
+    const sarif = JSON.parse(results);
+    const sarifResults = sarif.runs[0].results;
+    if (sarifResults.length > 0) {
+      app.log.debug(`rejecting since sarifResults.length is ${sarifResults.length}`)
       await rejectWorkflow(app, context, runId)
+    } else {
+      app.log.debug(`approving since sarifResults.length is ${sarifResults.length}`)
+      await approveWorkflow(app, context, runId);
     }
 
-  })
+    // Cleanup
+    executeCommand(`rm -rf ${workspace}`);
+  });
 
   app.log.info("Honey Badger's listening!");
   app.log.info(badger);
