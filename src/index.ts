@@ -23,17 +23,26 @@ export = async (app: Probot) => {
 
     // Get the workflow file(s) for runID
     const workflow = await getWorkflow(app, context, runId);
-    const workflowFilePath = workflow.path;
 
     // Checkout the workflowFilePath from the repo
     const workflowFile = await context.octokit.request('GET /repos/{owner}/{repo}/contents/{path}', context.repo({
-      path: workflowFilePath,
+      path: workflow.data.path,
     }))
     
     const workflowFileContent = Buffer.from(workflowFile.data.content, 'base64').toString('utf8');
-
-    // Log workflowFileContent
     app.log.info(`workflowFileContent: ${workflowFileContent}`)
+
+    // Execute codeql to create database
+    var exec = require('child_process').exec;
+    exec('codeql --version', function (error: any, stdout: any, stderr: any) {
+      console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) {
+             console.log('exec error: ' + error);
+        }
+    });
+
+    
 
     const result = Math.random() * 10;
     if (result < 5) {
@@ -86,7 +95,7 @@ async function getWorkflow(app: Probot, context: any, run_id: string | undefined
     const workflow = await context.octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}', context.repo({
       run_id,
     }))
-    app.log.info(`workflow: ${workflow}`)
+    app.log.info(`workflow: ${workflow.data.path}`)
     return workflow
   } catch (error: any) {
     app.log(error)
