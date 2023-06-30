@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import { Probot } from "probot";
 const badger = `
 ___,,___
@@ -21,21 +22,27 @@ export = async (app: Probot) => {
     context.payload.deployment_callback_url.match(regex);
     const runId = matches?.[1];
 
-    // Get the workflow file(s) for runID
     const workflow = await getWorkflow(app, context, runId);
-
-    // Checkout the workflowFilePath from the repo
     const workflowFile = await context.octokit.request('GET /repos/{owner}/{repo}/contents/{path}', context.repo({
       path: workflow.data.path,
     }))
     
     const workflowFileContent = Buffer.from(workflowFile.data.content, 'base64').toString('utf8');
-    app.log.info(`workflowFileContent: ${workflowFileContent}`)
+    const workspace = require('path').join(__dirname, runId);
+    executeCommand(`mkdir -p ${workspace}/.github/workflows`);
+    const workflowPath = require('path').join(workspace, workflow.data.path);
+    const fs = require('fs');
+    fs.writeFileSync(workflowPath, workflowFileContent);
 
     // Execute codeql to create database
-    executeCommand('codeql database create codeql_database/javascript --language javascript --source-root .');
-    executeCommand('codeql database analyze codeql_database/javascript --format=sarif-latest --output=results.sarif && cat results.sarif');
+    const codeqlQueries = require('path').join(__dirname, '..', 'codeql-queries', 'javascript', 'CWE-829', 'UnpinnedActionsTag.ql');
+    const codeqlDatabase = require('path').join(workspace, 'codeql_database', 'javascript');
+    executeCommand(`codeql --version`);
+    executeCommand(`mkdir -p ${codeqlDatabase} && codeql database create ${codeqlDatabase} --language javascript --source-root ${workspace} --verbosity=errors`);
+    executeCommand(`codeql database analyze ${codeqlDatabase} ${codeqlQueries} --format=sarif-latest --output=${workspace}/results.sarif --verbosity=errors`);
     
+    // executeCommand(`rm -rf ${workspace}`);
+
     const result = Math.random() * 10;
     if (result < 5) {
       app.log.debug(`approving since result is ${result}`)
@@ -94,17 +101,11 @@ async function getWorkflow(app: Probot, context: any, run_id: string | undefined
   }
 }
 
-// A helper function to exectue commands
 function executeCommand(command: string) {
-  const { exec } = require('child_process');
-  exec(command, (err: any, stdout: any, stderr: any) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    if (stderr) {
-      console.log(stderr);
-    }
-    console.log(stdout);
-  });
+  try {
+    const result = execSync(command, { encoding: 'utf-8' });
+    console.log(result);
+  } catch (error: any) {
+    console.error(error);
+  }
 }
