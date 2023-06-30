@@ -33,9 +33,8 @@ export = async (app: Probot) => {
     app.log.info(`workflowFileContent: ${workflowFileContent}`)
 
     // Execute codeql to create database
-    executeCommand('codeql database create --language javascript --source-root .');
-    executeCommand('codeql database analyze --format=sarif-latest --output=results.sarif');
-    executeCommand('cat results.sarif');
+    executeCommand('codeql database create codeql_database/javascript --language javascript --source-root .');
+    executeCommand('codeql database analyze codeql_database/javascript --format=sarif-latest --output=results.sarif && cat results.sarif');
     
     const result = Math.random() * 10;
     if (result < 5) {
@@ -96,7 +95,7 @@ async function getWorkflow(app: Probot, context: any, run_id: string | undefined
 }
 
 // A helper function to exectue commands
-async function executeCommand(command: string) {
+function executeCommand(command: string) {
   const { exec } = require('child_process');
   exec(command, (err: any, stdout: any, stderr: any) => {
     if (err) {
