@@ -21,11 +21,19 @@ export = async (app: Probot) => {
     context.payload.deployment_callback_url.match(regex);
     const runId = matches?.[1];
 
-    // Get the workflow file for runID
+    // Get the workflow file(s) for runID
     const workflow = await getWorkflow(app, context, runId);
+    const workflowFilePath = workflow.path;
 
-    // Log the contents of workflow
-    app.log.info(`workflow: ${workflow}`)
+    // Checkout the workflowFilePath from the repo
+    const workflowFile = await context.octokit.request('GET /repos/{owner}/{repo}/contents/{path}', context.repo({
+      path: workflowFilePath,
+    }))
+    
+    const workflowFileContent = Buffer.from(workflowFile.data.content, 'base64').toString('utf8');
+
+    // Log workflowFileContent
+    app.log.info(`workflowFileContent: ${workflowFileContent}`)
 
     const result = Math.random() * 10;
     if (result < 5) {
@@ -71,11 +79,11 @@ async function rejectWorkflow(app: Probot, context: any, run_id: string | undefi
   }
 }
 
-// An async function that downloads the workflow file from a specific run
+// An async function that gets workflow for a specific run
 async function getWorkflow(app: Probot, context: any, run_id: string | undefined) {
   app.log.info(`Getting workflow! ${run_id}`);
   try {
-    const workflow = await context.octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/workflow_file', context.repo({
+    const workflow = await context.octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}', context.repo({
       run_id,
     }))
     app.log.info(`workflow: ${workflow}`)
@@ -84,6 +92,3 @@ async function getWorkflow(app: Probot, context: any, run_id: string | undefined
     app.log(error)
   }
 }
-
-// Using the payload from the webhook, use the run_id to get the workflow file
-
