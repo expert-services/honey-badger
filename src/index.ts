@@ -1,3 +1,4 @@
+import { exec } from "child_process";
 import { Probot } from "probot";
 const badger = `
 ___,,___
@@ -33,17 +34,10 @@ export = async (app: Probot) => {
     app.log.info(`workflowFileContent: ${workflowFileContent}`)
 
     // Execute codeql to create database
-    var exec = require('child_process').exec;
-    exec('codeql --version', function (error: any, stdout: any, stderr: any) {
-      console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
-        if (error !== null) {
-             console.log('exec error: ' + error);
-        }
-    });
-
+    executeCommand('codeql database create --language javascript --source-root .');
+    executeCommand('codeql database analyze --format=sarif-latest --output=results.sarif');
+    executeCommand('cat results.sarif');
     
-
     const result = Math.random() * 10;
     if (result < 5) {
       app.log.debug(`approving since result is ${result}`)
@@ -67,7 +61,7 @@ async function approveWorkflow(app: Probot, context: any, run_id: string | undef
       run_id,
       environment_name: context.payload.environment,
       state: 'approved',
-      comment: 'Compliance checks passed.'
+      comment: 'Workflow file looks good'
     }))
   } catch (error: any) {
     app.log(error)
@@ -81,7 +75,7 @@ async function rejectWorkflow(app: Probot, context: any, run_id: string | undefi
       run_id,
       environment_name: context.payload.environment,
       state: 'rejected',
-      comment: 'Failed Compliance Checks'
+      comment: 'Honey Badger don\'t care'
     }))
   } catch (error: any) {
     app.log(error)
@@ -100,4 +94,16 @@ async function getWorkflow(app: Probot, context: any, run_id: string | undefined
   } catch (error: any) {
     app.log(error)
   }
+}
+
+// A helper function to exectue commands
+async function executeCommand(command: string) {
+  const { exec } = require('child_process');
+  exec(command, (err: any, stdout: any, stderr: any) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(stdout);
+  });
 }
