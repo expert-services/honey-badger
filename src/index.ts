@@ -1,4 +1,3 @@
-import { exec } from "child_process";
 import { Probot } from "probot";
 const badger = `
 ___,,___
@@ -103,6 +102,9 @@ async function executeCommand(command: string) {
     if (err) {
       console.log(err);
       return;
+    }
+    if (stderr) {
+      console.log(stderr);
     }
     console.log(stdout);
   });
