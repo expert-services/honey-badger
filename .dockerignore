@@ -9,3 +9,5 @@
 **/dist
 **/*.pem
 Dockerfile
+local-codeql-testing/**
+codeql/**

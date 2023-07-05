@@ -36,9 +36,9 @@ export = async (app: Probot) => {
     fs.writeFileSync(workflowPath, workflowFileContent);
 
     // Execute CodeQL 
-    const codeqlQueries = require('path').join(__dirname, '..', 'codeql-queries', 'javascript', 'CWE-829', 'UnpinnedActionsTag.ql');
+    const codeqlQueries = executeCommand(`find /usr/local/bin/codeql -type f -name actions-code-scanning.qls`);
+    //const codeqlQueries = executeCommand(`find -name javascript-actions.qls`)?.toString().trim();
     const codeqlDatabase = require('path').join(workspace, 'codeql_database', 'javascript');
-    executeCommand(`codeql --version`);
     executeCommand(`mkdir -p ${codeqlDatabase} && codeql database create ${codeqlDatabase} --language javascript --source-root ${workspace} --verbosity=errors`);
     executeCommand(`codeql database analyze ${codeqlDatabase} ${codeqlQueries} --format=sarif-latest --output=${workspace}/results.sarif --verbosity=errors`);
     
@@ -108,7 +108,9 @@ function executeCommand(command: string) {
   try {
     const result = execSync(command, { encoding: 'utf-8' });
     console.log(result);
+    return result.toString();
   } catch (error: any) {
     console.error(error);
-  }
+  }  
+  return
 }

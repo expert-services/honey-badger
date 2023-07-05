@@ -1,3 +1,0 @@
-[submodule "codeql-queries"]
-	path = codeql-queries
-	url = https://github.com/advanced-security/codeql-queries.git

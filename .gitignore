@@ -11,3 +11,4 @@ node_modules
 .env
 lib
 codeql
+local-codeql-testing
