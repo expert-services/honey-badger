@@ -1,0 +1,5 @@
+- description: Actions-based security queries for JavaScript and TypeScript
+- queries: .
+- include:
+    tags contain: actions
+

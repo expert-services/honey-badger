@@ -36,7 +36,7 @@ export = async (app: Probot) => {
     fs.writeFileSync(workflowPath, workflowFileContent);
 
     // Execute CodeQL 
-    const codeqlQueries = executeCommand(`find /usr/local/bin/codeql -type f -name actions-code-scanning.qls`)?.toString().trim();
+    const codeqlQueries = executeCommand(`find /usr/local/bin/codeql -type f -name javascript-actions.qls`)?.toString().trim();
     // const codeqlQueries = executeCommand(`find -name javascript-actions.qls`)?.toString().trim();
     const codeqlDatabase = require('path').join(workspace, 'codeql_database', 'javascript');
     executeCommand(`mkdir -p ${codeqlDatabase} && codeql database create ${codeqlDatabase} --language javascript --source-root ${workspace} --verbosity=errors`);
