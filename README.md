@@ -78,6 +78,7 @@ jobs:
 2. Copy the contents of [terraform/](terraform/) into the repository created during Step 4 of the Requirements section
    1. Optionally edit the default values in the `variables.tf` file copied in Step 1
 3. Upon committing the files Step 2 observe the `deploy_to_azure.yml` workflow execute
+4. Update the GitHub App **Webook URL** mentioned in Step 1 of the Requirements section to the URL of the App Service that is deployed
 
 > **Note**
 > If using the default values in [terraform/variables.tf](terraform/variables.tf), resources will be deployed in the East US region
@@ -108,10 +109,74 @@ terraform init -backend-config="resource_group_name=$($storageAccount.ResourceGr
 ### Using Environments
 ### Accepted Workflow
 
-## Example Rejected Workflow
+```
+name: "CodeQL Scan"
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  analyze:
+    name: Analyze
+    environment: production
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript' ]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        queries: security-extended
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+```
+
+![image](https://github.com/expert-services/honey-badger/assets/107562400/e86966ec-327b-4c5d-8ffe-df94f608fc59)
 
 
-### Local Development
+### Rejected Workflow
+
+[CWE-094 (Expression Injection)](https://github.com/github/codeql/blob/main/javascript/ql/src/Security/CWE-094/ExpressionInjection.ql)
+
+```
+name: Vulnerable Issue
+on: 
+  issue_comment:
+  workflow_dispatch:
+jobs:
+  echo-body:
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo '${{ github.event.comment.body }}'
+```
+
+![image](https://github.com/expert-services/honey-badger/assets/107562400/1dec51d8-1781-4e75-9ea7-c355bea79609)
+
+## Query Suites
+To identify the queries that CodeQL associates with GitHub Actions, the `@tag actions` metadata key is targeted by creating a query suite similar to the below. Using this method avoids using non-applicable queries, as support for scanning Actions workflow files is provided by the JavaScript extractor.   
+
+```
+- description: Actions-based security queries for JavaScript and TypeScript
+- queries: .
+- include:
+    tags contain: actions
+```
+
+In addition to the native queries that are bundled with CodeQL, the GitHub Advanced Security Field Team has also created the following queries related to securing GitHub Actions
+- [Unpinned tag for 3rd party Action in workflow](https://github.com/advanced-security/codeql-queries/blob/main/javascript/CWE-829/UnpinnedActionsTag.md)
+
+## Local Development
 To install this Probot application, follow these steps:
 1. Clone this repository to your development environment
 2. Create a .env file in the root directory of the repository with the following content, and replace the values in angle brackets with your own values:
