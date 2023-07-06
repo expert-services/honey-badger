@@ -7,7 +7,7 @@ on:
       - 'terraform/**'
 jobs:     
   Deploy:
-    uses: expert-services/reusable-workflows/.github/workflows/az_deploy_github_app.yml@main
+    uses: expert-services/reusable-workflows/.github/workflows/deploy_github_app.yml@main
     with:
       app-name: hb
     secrets: inherit
