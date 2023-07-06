@@ -4,7 +4,7 @@ This Probot application can be deployed as an Azure Web App (via docker containe
   * Uses CodeQL to scan the workflow file for vulnerabilities
   * Sends a `POST` back to GitHub approving or rejecting the workflow execution
 
-### Functional Architecture
+## Functional Architecture
 ![image](https://github.com/expert-services/honey-badger/assets/107562400/db6bebcb-ef57-48ff-8a40-785cf020edf8)
 
 1. A given workflow reaches a job that references an environment that has the custom deployment protection rule enabled
@@ -82,8 +82,8 @@ jobs:
 > **Note**
 > If using the default values in [terraform/variables.tf](terraform/variables.tf), resources will be deployed in the East US region
 
-#### State Management
-Code is included in the [.github/workflows/deploy_to_azure.yml](.github/workflows/deploy_to_azure.yml) to boostrap and maintain the needed Azure infrastructure for Terraform state files. The workflow creates an Azure Storage Account `<app-name>state<GITHUB_ORG>` (omitting `-` characters, limiting the name to 24 characters), as well as a storage container named `<GITHUB_ORG>-tfstate` if they are not present. This Azure Storage Account is then referenced as part of a backend configuration for Terraform state when initializing with the `terraform` CLI. If these values create a collision or are not up to the desired naming standards, change them before executing the workflow.
+### State Management
+Code is included as part of the referenced reusable workflow at  [expert-services/reusable-workflows/.github/workflows/deploy_github_app.yml](https://github.com/expert-services/reusable-workflows/blob/main/.github/workflows/deploy_github_app.yml) to boostrap and maintain the needed Azure infrastructure for Terraform state files. The workflow creates an Azure Storage Account `<app-name>state<GITHUB_ORG>` (omitting `-` characters, limiting the name to 24 characters), as well as a storage container named `<GITHUB_ORG>-tfstate` if they are not present. This Azure Storage Account is then referenced as part of a backend configuration for Terraform state when initializing with the `terraform` CLI. If these values create a collision or are not up to the desired naming standards, change them before executing the workflow.
 
 ```powershell 
 ...
@@ -101,6 +101,15 @@ terraform init -backend-config="resource_group_name=$($storageAccount.ResourceGr
 ...
 ...
 ```
+
+
+
+## Examples
+### Using Environments
+### Accepted Workflow
+
+## Example Rejected Workflow
+
 
 ### Local Development
 To install this Probot application, follow these steps:
