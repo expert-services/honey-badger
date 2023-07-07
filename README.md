@@ -103,49 +103,11 @@ terraform init -backend-config="resource_group_name=$($storageAccount.ResourceGr
 ...
 ```
 
+## Using Environments
+In order for Deployment Protection Rules to be invoked, a given workflow must target an Environment that has a Deployment Protection Rule associated with it. 
 
-
-## Examples
-### Using Environments
-### Accepted Workflow
-
-```
-name: "CodeQL Scan"
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
-jobs:
-  analyze:
-    name: Analyze
-    environment: production
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'javascript' ]
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
-        queries: security-extended
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-```
-
-![image](https://github.com/expert-services/honey-badger/assets/107562400/e86966ec-327b-4c5d-8ffe-df94f608fc59)
-
-
-### Rejected Workflow
-
-[CWE-094 (Expression Injection)](https://github.com/github/codeql/blob/main/javascript/ql/src/Security/CWE-094/ExpressionInjection.ql)
+## Rejected Workflow Example
+The below workflow is an example of [CWE-094 (Expression Injection)](https://github.com/github/codeql/blob/main/javascript/ql/src/Security/CWE-094/ExpressionInjection.ql). The workflow is triggered when a GitHub Issue comment is made, and uses the comment itself in a `run:` statement. This would allow an attacker or malicious user to execute an arbitrary expression.
 
 ```
 name: Vulnerable Issue
@@ -160,6 +122,8 @@ jobs:
     - run: |
         echo '${{ github.event.comment.body }}'
 ```
+
+CodeQL is able to detect the vulnerability, and the Deployment Protection Rule rejects the workflow (the `run:` statement is not executed).
 
 ![image](https://github.com/expert-services/honey-badger/assets/107562400/1dec51d8-1781-4e75-9ea7-c355bea79609)
 
