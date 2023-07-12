@@ -1,0 +1,18 @@
+{
+    "name": "codeql-analysis.yml",
+    "path": ".github/workflows/codeql-analysis.yml",
+    "sha": "14fbefda1b36d35eb0b34d3e42561cd85c2f654f",
+    "size": 649,
+    "url": "https://api.github.com/repos/oodles-noodles/juice-shop/contents/.github/workflows/codeql-analysis.yml?ref=master",
+    "html_url": "https://github.com/oodles-noodles/juice-shop/blob/master/.github/workflows/codeql-analysis.yml",
+    "git_url": "https://api.github.com/repos/oodles-noodles/juice-shop/git/blobs/14fbefda1b36d35eb0b34d3e42561cd85c2f654f",
+    "download_url": "https://raw.githubusercontent.com/oodles-noodles/juice-shop/master/.github/workflows/codeql-analysis.yml",
+    "type": "file",
+    "content": "bmFtZTogIkNvZGVRTCBTY2FuIgoKb246CiAgcHVzaDoKICBwdWxsX3JlcXVl\nc3Q6CiAgd29ya2Zsb3dfZGlzcGF0Y2g6Cgpqb2JzOgogIGFuYWx5emU6CiAg\nICBuYW1lOiBBbmFseXplCiAgICBlbnZpcm9ubWVudDogcHJvZHVjdGlvbgog\nICAgcnVucy1vbjogdWJ1bnR1LWxhdGVzdAogICAgcGVybWlzc2lvbnM6CiAg\nICAgIGFjdGlvbnM6IHJlYWQKICAgICAgY29udGVudHM6IHJlYWQKICAgICAg\nc2VjdXJpdHktZXZlbnRzOiB3cml0ZQogICAgc3RyYXRlZ3k6CiAgICAgIGZh\naWwtZmFzdDogZmFsc2UKICAgICAgbWF0cml4OgogICAgICAgIGxhbmd1YWdl\nOiBbICdqYXZhc2NyaXB0JyBdCiAgICBzdGVwczoKICAgIC0gbmFtZTogQ2hl\nY2tvdXQgcmVwb3NpdG9yeQogICAgICB1c2VzOiBhY3Rpb25zL2NoZWNrb3V0\nQHYzCiAgICAtIG5hbWU6IEluaXRpYWxpemUgQ29kZVFMCiAgICAgIHVzZXM6\nIGdpdGh1Yi9jb2RlcWwtYWN0aW9uL2luaXRAdjIKICAgICAgd2l0aDoKICAg\nICAgICBsYW5ndWFnZXM6ICR7eyBtYXRyaXgubGFuZ3VhZ2UgfX0KICAgICAg\nICBxdWVyaWVzOiBzZWN1cml0eS1leHRlbmRlZAogICAgLSBuYW1lOiBQZXJm\nb3JtIENvZGVRTCBBbmFseXNpcwogICAgICB1c2VzOiBnaXRodWIvY29kZXFs\nLWFjdGlvbi9hbmFseXplQHYyCg==\n",
+    "encoding": "base64",
+    "_links": {
+      "self": "https://api.github.com/repos/oodles-noodles/juice-shop/contents/.github/workflows/codeql-analysis.yml?ref=master",
+      "git": "https://api.github.com/repos/oodles-noodles/juice-shop/git/blobs/14fbefda1b36d35eb0b34d3e42561cd85c2f654f",
+      "html": "https://github.com/oodles-noodles/juice-shop/blob/master/.github/workflows/codeql-analysis.yml"
+    }
+  }
