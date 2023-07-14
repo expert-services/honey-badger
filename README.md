@@ -5,7 +5,7 @@ This Probot application can be deployed as an Azure Web App (via docker containe
   * Sends a `POST` back to GitHub approving or rejecting the workflow execution
 
 ## Functional Architecture
-![image](https://github.com/expert-services/honey-badger/assets/107562400/db6bebcb-ef57-48ff-8a40-785cf020edf8)
+![image](https://github.com/expert-services/honey-badger/assets/107562400/fb124a43-7eee-47a4-a56a-540342a4556a)
 
 1. A given workflow reaches a job that references an environment that has the custom deployment protection rule enabled
 2. Deployment protection rule event generated
