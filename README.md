@@ -125,7 +125,7 @@ jobs:
 
 CodeQL is able to detect the vulnerability, and the Deployment Protection Rule rejects the workflow (the `run:` statement is not executed).
 
-![image](https://github.com/expert-services/honey-badger/assets/107562400/1dec51d8-1781-4e75-9ea7-c355bea79609)
+![image](https://github.com/expert-services/honey-badger/assets/107562400/bd49db97-92e4-4b39-80da-13cfb0afedb2)
 
 ## Query Suites
 To identify the queries that CodeQL associates with GitHub Actions, the `@tag actions` metadata key is targeted by creating a query suite similar to the below. Using this method avoids using non-applicable queries, as support for scanning Actions workflow files is provided by the JavaScript extractor.   
